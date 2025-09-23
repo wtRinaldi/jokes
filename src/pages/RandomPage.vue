@@ -1,11 +1,11 @@
 <template>
   <q-page class="row items-center justify-evenly">
-    <joke-table />
+    <random-jokes />
   </q-page>
 </template>
 
 <script setup lang="ts">
-import JokeTable from 'src/components/JokeTable.vue';
+import RandomJokes from 'src/components/RandomJokes.vue';
 
 
 
