@@ -7,23 +7,29 @@ const jokesStore = useJokesStore()
 const { jokes } = jokesStore
 
 const columns = ref<QTableColumn[]>([
-  { name: 'id', label: 'ID', field: 'id', align: 'left', sortable: true },
   { name: 'type', label: 'Type', field: 'type', align: 'left', sortable: true },
   { name: 'setup', label: 'Setup', field: 'setup', align: 'left', sortable: false },
   { name: 'punchline', label: 'Punchline', field: 'punchline', align: 'left', sortable: false },
 ])
+
+const pagination = ref({
+  page: 1,
+  rowsPerPage: 25,
+})
 </script>
 
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-md w-full">
     <q-table
       title="Jokes"
       :rows="jokes"
       :columns="columns"
+      v-model:pagination="pagination"
       row-key="id"
       :loading="jokesStore.loading"
       flat
       bordered
+      class="w-full"
     >
       <template v-slot:body-cell-setup="props">
         <q-td :props="props">

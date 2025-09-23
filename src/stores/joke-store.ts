@@ -11,10 +11,6 @@ export const useJokesStore = defineStore('jokes', {
 
   getters: {
     totalJokes: (state) => state.jokes.length,
-    randomJoke: (state) =>
-      state.jokes.length
-        ? state.jokes[Math.floor(Math.random() * state.jokes.length)]
-        : null,
   },
 
   actions: {
@@ -36,6 +32,10 @@ export const useJokesStore = defineStore('jokes', {
         this.loading = false
       }
     },
+    getRandomJoke(): Joke | null {
+      if (!this.jokes.length) return null
+      return this.jokes[Math.floor(Math.random() * this.jokes.length)] || null
+    }
   },
 })
 
