@@ -5,6 +5,7 @@ import type { Joke } from 'src/components/models'
 export const useJokesStore = defineStore('jokes', {
   state: () => ({
     jokes: [] as Joke[],
+    types: [] as string[],   // <-- new state for joke types
     loading: false,
     error: null as string | null,
   }),
@@ -32,6 +33,26 @@ export const useJokesStore = defineStore('jokes', {
         this.loading = false
       }
     },
+
+    async fetchJokeTypes() {
+      this.loading = true
+      this.error = null
+      try {
+        const { data } = await axios.get(
+          'https://official-joke-api.appspot.com/types'
+        )
+        this.types = data
+      } catch (err) {
+        if (err instanceof Error) {
+          this.error = err.message
+        } else {
+          this.error = 'Failed to fetch joke types'
+        }
+      } finally {
+        this.loading = false
+      }
+    },
+
     getRandomJoke(): Joke | null {
       if (!this.jokes.length) return null
       return this.jokes[Math.floor(Math.random() * this.jokes.length)] || null
@@ -39,5 +60,5 @@ export const useJokesStore = defineStore('jokes', {
   },
 })
 
-// Automatically fetch jokes as soon as the store is imported
+await useJokesStore().fetchJokeTypes()
 await useJokesStore().fetchJokes()

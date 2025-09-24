@@ -26,7 +26,7 @@ function nextJoke() {
       clearInterval(interval)
       setTimeout(() => {
         showPunchline.value = true
-      }, 800)
+      }, 1000)
     }
   }, 50)
 }
