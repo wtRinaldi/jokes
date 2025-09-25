@@ -4,12 +4,20 @@ import { ref, computed } from 'vue'
 import type { QTableColumn } from 'quasar'
 
 const jokesStore = useJokesStore()
-const { jokes } = jokesStore
+const { jokes, loading } = jokesStore
 
 const columns = ref<QTableColumn[]>([
-  { name: 'type', label: 'Type', field: 'type', align: 'left', sortable: false, style: 'width: 120px' },
+  { name: 'type', label: 'Type', field: 'type', align: 'left', sortable: false, headerStyle: 'width: 120px' },
   { name: 'setup', label: 'Setup', field: 'setup', align: 'left', sortable: true, style: 'width: 40%' },
   { name: 'punchline', label: 'Punchline', field: 'punchline', align: 'left', sortable: true, style: 'width: 40%' },
+  {
+    name: 'action',
+    label: 'Favorite',
+    field: row => (jokesStore.isFavorite(row.id) ? 1 : 0),
+    align: 'center',
+    sortable: true,
+    headerStyle: 'width: 100px'
+  }
 ])
 
 const pagination = ref({
@@ -20,7 +28,6 @@ const pagination = ref({
 const search = ref('')
 const selectedType = ref<string | null>(null)
 
-// Filter rows based on search + selected type
 const filteredRows = computed(() => {
   let rows = jokes
 
@@ -43,15 +50,14 @@ const filteredRows = computed(() => {
 
 <template>
   <div class="q-pa-md full-width">
-
     <q-table
-    :grid="$q.screen.lt.sm"
+      :grid="$q.screen.lt.sm"
       title="Jokes"
       :rows="filteredRows"
       :columns="columns"
       v-model:pagination="pagination"
       row-key="id"
-      :loading="jokesStore.loading"
+      :loading="loading"
       flat
       bordered
       class="fixed-table"
@@ -81,20 +87,28 @@ const filteredRows = computed(() => {
             </template>
           </q-input>
         </div>
-
       </template>
 
-      <template v-slot:body-cell-setup="props">
-        <q-td :props="props">
-          {{ props.row.setup }}
-        </q-td>
-      </template>
-
+      <!-- Punchline with chip -->
       <template v-slot:body-cell-punchline="props">
         <q-td :props="props">
           <q-chip color="secondary" text-color="white">
             {{ props.row.punchline }}
           </q-chip>
+        </q-td>
+      </template>
+
+      <!-- Action column (toggle favorite) -->
+      <template v-slot:body-cell-action="props">
+        <q-td :props="props" class="text-center">
+          <q-btn
+            flat
+            round
+            size="sm"
+            :icon="jokesStore.isFavorite(props.row.id) ? 'favorite' : 'favorite_border'"
+            :color="jokesStore.isFavorite(props.row.id) ? 'red' : 'grey'"
+            @click="jokesStore.toggleFavorite(props.row.id)"
+          />
         </q-td>
       </template>
     </q-table>
@@ -103,17 +117,13 @@ const filteredRows = computed(() => {
       Error: {{ jokesStore.error }}
     </div>
   </div>
-        <div class="test"></div>
 </template>
 
 <style scoped>
-  .fixed-table table {
-    table-layout: fixed;
-  }
-
-  .filter-input {
-    max-width: 350px;
-  }
-
-  
+.fixed-table table {
+  table-layout: fixed;
+}
+.filter-input {
+  max-width: 350px;
+}
 </style>

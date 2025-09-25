@@ -3,17 +3,29 @@ import axios from 'axios'
 import type { Joke } from 'src/components/models'
 import { Notify } from 'quasar'
 
-console.log(Notify)
+// Extend Joke type with favorite
+export interface JokeWithFavorite extends Joke {
+  favorite?: boolean
+}
+
 export const useJokesStore = defineStore('jokes', {
   state: () => ({
-    jokes: [] as Joke[],
-    types: [] as string[],   // <-- new state for joke types
+    jokes: [] as JokeWithFavorite[],
+    types: [] as string[],
     loading: false,
     error: null as string | null,
   }),
 
   getters: {
     totalJokes: (state) => state.jokes.length,
+    favoriteJokes: (state) => state.jokes.filter(j => j.favorite),
+    // getter that works like a function: jokesStore.isFavorite(id)
+    isFavorite: (state) => {
+      return (id: number) => {
+        const joke = state.jokes.find(j => j.id === id)
+        return joke?.favorite === true
+      }
+    }
   },
 
   actions: {
@@ -24,7 +36,11 @@ export const useJokesStore = defineStore('jokes', {
         const { data } = await axios.get(
           'https://official-joke-api.appspot.com/jokes/random/451'
         )
-        this.jokes = data
+        // add favorite flag
+        this.jokes = data.map((joke: Joke) => ({
+          ...joke,
+          favorite: false,
+        }))
       } catch (err) {
         if (err instanceof Error) {
           this.error = err.message
@@ -34,7 +50,7 @@ export const useJokesStore = defineStore('jokes', {
         Notify.create({
           message: 'Unable to fetch jokes. No Joke.',
           color: 'negative',
-          position: 'top'
+          position: 'top',
         })
       } finally {
         this.loading = false
@@ -58,19 +74,29 @@ export const useJokesStore = defineStore('jokes', {
         Notify.create({
           message: 'Unable to fetch joke types. Not good!',
           color: 'negative',
-          position: 'top'
+          position: 'top',
         })
       } finally {
         this.loading = false
       }
     },
 
-    getRandomJoke(): Joke | null {
+    getRandomJoke(): JokeWithFavorite | null {
       if (!this.jokes.length) return null
-      return this.jokes[Math.floor(Math.random() * this.jokes.length)] || null
-    }
+      return (
+        this.jokes[Math.floor(Math.random() * this.jokes.length)] || null
+      )
+    },
+
+    toggleFavorite(id: number) {
+      const joke = this.jokes.find(j => j.id === id)
+      if (joke) {
+        joke.favorite = !joke.favorite
+      }
+    },
   },
 })
 
+// Preload data (optional if you want auto-fetch on app start)
 await useJokesStore().fetchJokeTypes()
 await useJokesStore().fetchJokes()
