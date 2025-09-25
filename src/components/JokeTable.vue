@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { useJokesStore } from '../stores/joke-store'
+import type { JokeWithFavorite } from '../stores/joke-store'
 import { ref, computed } from 'vue'
 import type { QTableColumn } from 'quasar'
+import { storeToRefs } from 'pinia'
 
 const jokesStore = useJokesStore()
-const { jokes, loading } = jokesStore
+const { jokes, loading } = storeToRefs(jokesStore)
 
 const columns = ref<QTableColumn[]>([
   {
@@ -53,23 +55,24 @@ const search = ref('')
 const selectedType = ref<string | null>(null)
 
 const filteredRows = computed(() => {
-  let rows = jokes
+  let rows = jokes.value
 
   if (selectedType.value) {
-    rows = rows.filter(j => j.type === selectedType.value)
+    rows = rows.filter((j: JokeWithFavorite) => j.type === selectedType.value)
   }
 
   if (search.value) {
     const queryString = search.value.toLowerCase()
     rows = rows.filter(
-      joke =>
-        joke.setup.toLowerCase().includes(queryString) ||
-        joke.punchline.toLowerCase().includes(queryString)
+      (j: JokeWithFavorite) =>
+        j.setup.toLowerCase().includes(queryString) ||
+        j.punchline.toLowerCase().includes(queryString)
     )
   }
 
   return rows
 })
+
 </script>
 
 <template>

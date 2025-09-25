@@ -96,7 +96,3 @@ export const useJokesStore = defineStore('jokes', {
     },
   },
 })
-
-// Preload data (optional if you want auto-fetch on app start)
-await useJokesStore().fetchJokeTypes()
-await useJokesStore().fetchJokes()
