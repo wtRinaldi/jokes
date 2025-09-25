@@ -1,3 +1,35 @@
+<script setup lang="ts">
+import { ref } from 'vue';
+import EssentialLink, { type EssentialLinkProps } from 'components/EssentialLink.vue';
+
+const linksList: EssentialLinkProps[] = [
+  {
+    title: 'All Jokes',
+    caption: 'search jokes',
+    icon: 'table_view',
+    link: '/'
+  },
+  {
+    title: 'Random Joke',
+    caption: 'get a random joke',
+    icon: 'casino',
+    link: '/random'
+  },
+  {
+    title: 'Joke Panel',
+    caption: 'get jokes by panel',
+    icon: 'web',
+    link: '/panel'
+  },
+];
+
+const leftDrawerOpen = ref(false);
+
+function toggleLeftDrawer () {
+  leftDrawerOpen.value = !leftDrawerOpen.value;
+}
+</script>
+
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
@@ -44,28 +76,4 @@
   </q-layout>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
-import EssentialLink, { type EssentialLinkProps } from 'components/EssentialLink.vue';
 
-const linksList: EssentialLinkProps[] = [
-  {
-    title: 'All Jokes',
-    caption: 'search jokes',
-    icon: 'table_view',
-    link: '/'
-  },
-  {
-    title: 'Random Joke',
-    caption: 'get a random joke',
-    icon: 'casino',
-    link: '/random'
-  },
-];
-
-const leftDrawerOpen = ref(false);
-
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
-}
-</script>

@@ -7,9 +7,9 @@ const jokesStore = useJokesStore()
 const { jokes } = jokesStore
 
 const columns = ref<QTableColumn[]>([
-  { name: 'type', label: 'Type', field: 'type', align: 'left', sortable: true, style: 'width: 120px' },
-  { name: 'setup', label: 'Setup', field: 'setup', align: 'left', sortable: false, style: 'width: 40%' },
-  { name: 'punchline', label: 'Punchline', field: 'punchline', align: 'left', sortable: false, style: 'width: 40%' },
+  { name: 'type', label: 'Type', field: 'type', align: 'left', sortable: false, style: 'width: 120px' },
+  { name: 'setup', label: 'Setup', field: 'setup', align: 'left', sortable: true, style: 'width: 40%' },
+  { name: 'punchline', label: 'Punchline', field: 'punchline', align: 'left', sortable: true, style: 'width: 40%' },
 ])
 
 const pagination = ref({
@@ -42,9 +42,10 @@ const filteredRows = computed(() => {
 </script>
 
 <template>
-  <div class="q-pa-md full-width sm:bg-primary">
+  <div class="q-pa-md full-width">
 
     <q-table
+    :grid="$q.screen.lt.sm"
       title="Jokes"
       :rows="filteredRows"
       :columns="columns"
@@ -57,7 +58,7 @@ const filteredRows = computed(() => {
     >
       <!-- Top slot with search & type filter -->
       <template v-slot:top>
-        <div class="column sm:row sm:items-center full-width q-gutter-sm md:bg-primary">
+        <div class="column full-width q-gutter-sm">
           <q-select
             v-model="selectedType"
             :options="jokesStore.types"

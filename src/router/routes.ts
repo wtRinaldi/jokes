@@ -6,10 +6,15 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
   },
-    {
+  {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '/random', component: () => import('pages/RandomPage.vue') }],
+  },
+      {
+    path: '/',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '/panel', component: () => import('pages/JokePanel.vue') }],
   },
 
   // Always leave this as last one,

@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import type { Joke } from 'src/components/models'
+import { Notify } from 'quasar'
 
+console.log(Notify)
 export const useJokesStore = defineStore('jokes', {
   state: () => ({
     jokes: [] as Joke[],
@@ -29,6 +31,11 @@ export const useJokesStore = defineStore('jokes', {
         } else {
           this.error = 'Failed to fetch jokes'
         }
+        Notify.create({
+          message: 'Unable to fetch jokes. No Joke.',
+          color: 'negative',
+          position: 'top'
+        })
       } finally {
         this.loading = false
       }
@@ -48,6 +55,11 @@ export const useJokesStore = defineStore('jokes', {
         } else {
           this.error = 'Failed to fetch joke types'
         }
+        Notify.create({
+          message: 'Unable to fetch joke types. Not good!',
+          color: 'negative',
+          position: 'top'
+        })
       } finally {
         this.loading = false
       }
