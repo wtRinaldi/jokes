@@ -16,10 +16,10 @@ const linksList: EssentialLinkProps[] = [
     link: '/random'
   },
   {
-    title: 'Joke Panel',
-    caption: 'get jokes by panel',
+    title: 'Joke List',
+    caption: 'get list of jokes',
     icon: 'web',
-    link: '/panel'
+    link: '/list'
   },
 ];
 

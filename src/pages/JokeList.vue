@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import JokePanel from 'src/components/JokePanel.vue';
+  import JokeList from 'src/components/JokeList/JokeList.vue';
 </script>
 
 <template>
   <q-page class="row justify-center">
-    <joke-panel />
+    <joke-list />
   </q-page>
 </template>
 
