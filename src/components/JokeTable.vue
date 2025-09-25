@@ -7,18 +7,42 @@ const jokesStore = useJokesStore()
 const { jokes, loading } = jokesStore
 
 const columns = ref<QTableColumn[]>([
-  { name: 'type', label: 'Type', field: 'type', align: 'left', sortable: false, headerStyle: 'width: 120px' },
-  { name: 'setup', label: 'Setup', field: 'setup', align: 'left', sortable: true, style: 'width: 40%' },
-  { name: 'punchline', label: 'Punchline', field: 'punchline', align: 'left', sortable: true, style: 'width: 40%' },
+  {
+    name: 'type',
+    label: 'Type',
+    field: 'type',
+    align: 'left',
+    sortable: false,
+    headerStyle: 'width:120px; min-width:120px; max-width:120px;',
+    style: 'width:120px; min-width:120px; max-width:120px;'
+  },
+  {
+    name: 'setup',
+    label: 'Setup',
+    field: 'setup',
+    align: 'left',
+    sortable: true,
+    headerStyle: 'width: 30%; min-width:500px; max-width:500px;',
+    style: 'width: 30%; min-width:500px; max-width:500px;'
+  },
+  {
+    name: 'punchline',
+    label: 'Punchline',
+    field: 'punchline',
+    align: 'left',
+    sortable: true
+  },
   {
     name: 'action',
     label: 'Favorite',
     field: row => (jokesStore.isFavorite(row.id) ? 1 : 0),
     align: 'center',
     sortable: true,
-    headerStyle: 'width: 100px'
+    headerStyle: 'width:100px; min-width:100px; max-width:100px;',
+    style: 'width:100px; min-width:100px; max-width:100px;'
   }
 ])
+
 
 const pagination = ref({
   page: 1,
@@ -51,7 +75,7 @@ const filteredRows = computed(() => {
 <template>
   <div class="q-pa-md full-width">
     <q-table
-      :grid="$q.screen.lt.sm"
+      :grid="$q.screen.lt.md"
       title="Jokes"
       :rows="filteredRows"
       :columns="columns"
