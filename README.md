@@ -24,7 +24,7 @@ quasar build
 
 ### Customize the configuration
 See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
-# jokes
+
 
 # Frontend Coding Exercise - Joke App
 
@@ -54,16 +54,15 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 - Search/filtering
 - Favoriting jokes
 - Responsive layout
-- Lightweight linting/formatting
 
 ## 4. Design Decisions & Thought Process
 - **API Consumption:** Fetched all jokes on store initialization
     - Jokes:
         - All jokes fetch via joke total 'https://official-joke-api.appspot.com/jokes/random/451'
-        - Given small number of jokes
+        - Given small dataset of jokes
             - we're able to fetch all jokes at once. Ideally, `/jokes` would return all jokes w/o requiring the number of jokes.  Currently, 451 is a hardcoded value.  Assumes number of jokes does not change
-        - Given a joke DB that would grow with out limit over time (user added jokes maybe) or a very large DB of jokes
-            - apis changes would require refactor to allow for backend filtering, sorting, and pagination
+        - Given large dataset that could grow with out limit over time (user added jokes maybe)
+            - backend sorting, filtering, pagination would require api structure update
     - Types:
         - Joke types were fetched via 'https://official-joke-api.appspot.com/types' and used in type filtering
     - Jokes & Types are prefetched on mounted of App.vue and fetched concurrently 
@@ -74,12 +73,13 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
     - App.vue -> MainLayout.vue -> router view -> nested routes (pages) -> components
     - Lists view demostrates proper encapsulation of component by function
         - encapsulated JokeListItem.vue & JokeTypeFilter.vue
-- **API Handling:** Implemented error handling and loading states to improve UX.
-    - simple notifications are presented to user on failure to fetch jokes / joke types
+- **API Handling:** Implemented error notification and loading states to improve UX.
+    - notifications are presented to user on failure to fetch jokes / joke types
+    - loading state is displayed in Quasar table
 - **Sorting & Filtering:** Used computed properties for performance and reactive updates.
     - Table view
         - Quasar table handles sorting and pagination with config options
-        - text filtering uses common pattern of providing table with computed `filteredRows`
+        - text filtering uses computed `filteredRows` property
             - uses `.filter` to iterate over rows and `.includes` to values matching the query string
         - type filtering uses computed property utilizing `.filter` to find matching types
     - List view
@@ -88,6 +88,4 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
     - Quasar table set to card view on smaller devices and breaks to table on larger devices
     - Random & List are simple layouts and work well on mobile
 
-## 5. Challenges & Solutions
-- content is simple so creating interesting UIs can be a challenge
 

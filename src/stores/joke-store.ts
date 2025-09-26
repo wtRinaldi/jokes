@@ -3,7 +3,6 @@ import axios from 'axios'
 import type { Joke } from 'src/components/models'
 import { Notify } from 'quasar'
 
-// Extend Joke type with favorite
 export interface JokeWithFavorite extends Joke {
   favorite?: boolean
 }
@@ -19,7 +18,6 @@ export const useJokesStore = defineStore('jokes', {
   getters: {
     totalJokes: (state) => state.jokes.length,
     favoriteJokes: (state) => state.jokes.filter(j => j.favorite),
-    // getter that works like a function: jokesStore.isFavorite(id)
     isFavorite: (state) => {
       return (id: number) => {
         const joke = state.jokes.find(j => j.id === id)
@@ -36,7 +34,6 @@ export const useJokesStore = defineStore('jokes', {
         const { data } = await axios.get(
           'https://official-joke-api.appspot.com/jokes/random/451'
         )
-        // add favorite flag
         this.jokes = data.map((joke: Joke) => ({
           ...joke,
           favorite: false,
